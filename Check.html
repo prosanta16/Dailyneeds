@@ -1,0 +1,208 @@
+    <!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<script
+
+  src="https://code.jquery.com/jquery-1.11.3.js"
+  integrity="sha256-IGWuzKD7mwVnNY01LtXxq3L84Tm/RJtNCYBfXZw3Je0="
+  crossorigin="anonymous"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<p><table id ="table" class="table table-bordered ">
+
+  
+</table>
+</p>
+<a href="#" class="btn">ADD</a>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+   $(window).load(function() {
+     loadCart();
+     displayCart();
+    });
+
+    // $(".btn").click(function(){
+    //   var t="<table class='table'> <tr> <th>Item</th><th> Price</th><th>Qunatity</th> </tr></table>";
+    //   $("#monu").html(t);
+    // })
+ 
+   
+     function displayCart()
+     {
+      var cartArray = listCart();
+      var totalPrice = 0;
+      var output ="<tr> <th> Name </th> <th> Price/item </th>  <th> Quantity </th><th> Total Price</th>  </tr>"
+      for(i in cartArray)
+      {
+            totalPrice +=cartArray[i].price * cartArray[i].count;
+            output +=" <tr> <td>"+cartArray[i].name+"</td> <td>"+cartArray[i].price+"</td> <td><button class='btn btn-danger'>-</button> " + cartArray[i].count + "<button class='btn btn-success'> +</button></td> <td>"+cartArray[i].price * cartArray[i].count+"</td> </tr>";
+
+            
+      }
+      output += "<tr> <td colspan=3>Total Price </td> <td>"+totalPrice  +"</td></tr>" 
+      $(".table").html(output);
+      
+     }
+     $(".btn btn-success,.btn btn-danger").click(function(event){
+      
+      if($(this).hasClass(".btn btn-success")){
+         var val=(cartArray[i].count)+1;
+      }
+      else{
+          var val=(cartArray[i].count)-1;
+
+        }
+
+  
+      saveCart();
+      }
+   })
+
+    
+
+
+    
+
+  //********************************
+  //functions
+  var cart = [];
+
+  var Item = function(name,price,count){
+        this.name = name
+        this.price = price
+        this.count = count
+  };
+     
+    //addItemToCart()
+    function addItemToCart(name, price, count)
+    {
+      for (var i in cart) {
+        if(cart[i].name === name)
+        {
+          cart[i].count +=count;
+          return;
+        }
+        
+      }
+      var item = new Item(name, price, count);
+      cart.push(item);
+      saveCart();     
+      
+    }
+  
+    
+    
+    //removeItemFromCart()
+    function removeItemFromCart(name)
+    {
+       for (var i in cart) {
+        if(cart[i].name === name)
+        {
+          cart[i].count --;
+          if (cart[i].count===0) {
+            cart.splice(i,1);
+          }
+          
+          break;
+        }
+        
+      }
+      saveCart();
+    }
+    
+
+    //removeItemFromCartAll()
+    function removeItemFromCartAll(name)
+    {
+      for (var i in cart) {
+        if(cart[i].name === name)
+        {
+          cart.splice(i,1);
+          break;
+        }
+        
+      }
+      saveCart();
+    }
+
+    
+   
+   
+    //clearCart()
+    function clearCart()
+    {
+      cart = [];
+      saveCart();
+    }
+
+
+    //countCart()--> return total items no
+    function countCart(){
+      var totalCount =0;
+      for(var i in cart)
+      {
+          totalCount += cart[i].count;   
+      }
+      return totalCount;
+    }
+
+    console.log(countCart());
+
+    //totalCart()-->return total cost
+    function totalCart(){
+      var totalCost =0;
+      for(var i in cart)
+      {
+          totalCost += cart[i].count * cart[i].price;   
+      }
+      return totalCost;
+    }
+    console.log(totalCart());
+    
+    //list cart --> array of all items
+    function listCart()
+    {
+      var cartCopy =[];
+      for(var i in cart)
+      {
+        var item = cart[i];
+        var itemCopy = {};
+        for(var p in item)
+        {
+          itemCopy[p]=item[p];
+        } 
+        cartCopy.push(itemCopy)
+      }
+      return cartCopy;
+    }
+
+
+    //saveCart()
+    function saveCart()
+    {
+      localStorage.setItem("shoppingCart",JSON.stringify(cart));
+    }
+   
+
+    //loadCart()
+    function loadCart()
+    {
+      cart = JSON.parse(localStorage.getItem("shoppingCart"));
+    }
+    
+
+</script>
+
+
+</body>
+</html>
